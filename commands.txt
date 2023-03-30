@@ -1,0 +1,97 @@
+1.
+user1 = User.objects.create(username='Paul', first_name='Pavel')
+user2 = User.objects.create(username='Piter', first_name='Petr')
+
+2.
+Author.objects.create(authorUser=user1)  
+Author.objects.create(authorUser=user2)
+
+3.
+Category.objects.create(name='IT')
+Category.objects.create(name='Education')
+Category.objects.create(name='Management')
+Category.objects.create(name='Marketing')
+
+4.
+Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Paul')), categoryType='AR', title='title1 title1', text='text1 text1')
+Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Piter')), categoryType='AR', title='title2 title2', text='text2 text2')
+Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Paul')), categoryType='NW', title='title3 title3', text='text3 text3')
+
+5.
+p1 = Post.objects.get(pk=1)
+p2 = Post.objects.get(pk=2)
+p3 = Post.objects.get(pk=3)
+c1 = Category.objects.get(name='IT')
+c2 = Category.objects.get(name='Education')
+p1.postCategory.add(c1)
+p2.postCategory.add(c1, c2)
+p3.postCategory.add(c1)
+
+6.
+Comment.objects.create(commentUser=User.objects.get(username='Paul'), commentPost=Post.objects.get(pk=1), text='comment text1')
+Comment.objects.create(commentUser=User.objects.get(username='Paul'), commentPost=Post.objects.get(pk=2), text='comment text2')
+Comment.objects.create(commentUser=User.objects.get(username='Piter'), commentPost=Post.objects.get(pk=3), text='comment text3')
+Comment.objects.create(commentUser=User.objects.get(username='Piter'), commentPost=Post.objects.get(pk=1), text='comment text4')
+
+7.
+Post.objects.get(pk=1).like()
+Post.objects.get(pk=1).like()
+Post.objects.get(pk=1).dislike()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=2).dislike()
+Post.objects.get(pk=3).like()
+Post.objects.get(pk=3).like()
+Post.objects.get(pk=3).dislike()
+Post.objects.get(pk=1).like()
+Post.objects.get(pk=1).like()
+Post.objects.get(pk=2).like()
+Comment.objects.get(pk=1).like()
+Comment.objects.get(pk=1).like()
+Comment.objects.get(pk=1).like()
+Comment.objects.get(pk=1).like()
+Comment.objects.get(pk=1).dislike()
+Comment.objects.get(pk=2).like()
+Comment.objects.get(pk=2).like()
+Comment.objects.get(pk=2).like()
+Comment.objects.get(pk=2).dislike()
+Comment.objects.get(pk=3).like()
+Comment.objects.get(pk=3).like()
+Comment.objects.get(pk=3).dislike()
+
+8.
+Author.objects.get(authorUser=User.objects.get(username='Paul')).update_rating()
+Author.objects.get(authorUser=User.objects.get(username='Piter')).update_rating()
+a = Author.objects.get(authorUser=User.objects.get(username='Paul'))
+a.ratingAuthor
+Author.objects.get(authorUser=User.objects.get(username='Piter')).ratingAuthor
+
+9.
+best = Author.objects.all().order_by('-ratingAuthor').values('authorUser', 'ratingAuthor')[0]
+print(best)
+
+10.
+first_rating_post = Post.objects.order_by('-rating').first()
+date = first_rating_post.dataCreation
+username = first_rating_post.author.authorUser.username
+rating = first_rating_post.rating
+title = highest_rated_post.title
+preview = first_rating_post.preview()
+print(f"Date: {date}, User: {username}, Rating: {rating}, Title: {title}, Preview: {preview}")
+
+11.
+comments = Comment.objects.filter(commentPost=first_rating_post)
+for comment in comments:
+    dateCom = comment.dataCreation
+    usernameCom = comment.commentUser.username
+    ratingCom = comment.rating
+    textCom = comment.text
+    print(f"Date: {dateCom}, User: {usernameCom}, Rating: {ratingCom}, Text: {textCom}")
+
+
+
+
+
+
+
+
