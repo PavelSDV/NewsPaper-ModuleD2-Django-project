@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ flatpage.title }}</title>
+<title>{% block title %} {% endblock title %}</title>
 </head>
 <body>
-{{ flatpage.content }}
+    {% block content %}
+    {% endblock content %}
 </body>
 </html>

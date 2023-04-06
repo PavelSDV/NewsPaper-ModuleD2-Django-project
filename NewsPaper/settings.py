@@ -65,8 +65,8 @@ ROOT_URLCONF = 'NewsPaper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        #'DIRS': [os.path.join(BASE_DIR, 'templates')], #Если по какой-то причине у вас появляется ошибка, что шаблон default.html не найден, просто поменяйте список TEMPLATES в настройках на следующий (не забудьте импортировать модуль os)
+        # 'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], #Если по какой-то причине у вас появляется ошибка, что шаблон default.html не найден, просто поменяйте список TEMPLATES в настройках на следующий (не забудьте импортировать модуль os)
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
