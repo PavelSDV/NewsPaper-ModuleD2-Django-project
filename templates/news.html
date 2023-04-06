@@ -1,0 +1,13 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет posts -->
+{% block title %}
+Posts
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все статьи -->
+{% block content %}
+<h1>Все статьи</h1>
+{{ posts }}
+{% endblock content %}
