@@ -8,5 +8,9 @@ Posts
 
 <!-- В контенте на странице мы выводим сами статьи, айди которого было передано в адрес -->
 {% block content %}
-<h1>{{ new }}</h1>
+{#<h1>{{ new }}</h1>#}
+    <h1>{{ new.title }}</h1>
+    <p>{{ new.text }}</p>
+    <p>{{ new.dataCreation|date:'d-m-Y H:i' }}</p>
+
 {% endblock content %}
