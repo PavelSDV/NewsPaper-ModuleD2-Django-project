@@ -1,0 +1,47 @@
+<!--  new наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+<!-- Название у нас будет search -->
+{% block title %}
+Search
+{% endblock title %}
+
+<!-- -----------               -->
+{% block content %}
+<p>Дата в формате год-месяц-день: хххх-xx-xx</p>
+    <!-- Перед таблицей добавим форму для поиска -->
+    <form method="GET">
+        {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы, придётся делать самому -->
+        <input type="submit" value="Найти">
+    </form>
+
+    <table>
+        <thead>
+            <th>
+                dataCreation
+            </th>
+            <th>
+                title
+            </th>
+            <th>
+                author
+            </th>
+        </thead>
+        {% for post in filter.qs %} <!-- поменяем post на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+        <tr>
+            <td>
+                {{ post.dataCreation|date:'d.m.Y' }}
+            </td>
+            <td>
+                {{ post.title|censor }}
+            </td>
+            <td>
+                {{ post.author }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock content %}
