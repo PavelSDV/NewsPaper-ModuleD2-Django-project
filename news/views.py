@@ -4,14 +4,15 @@ from django.core.paginator import Paginator # импортируем класс,
 
 from .models import Post
 from .filters import PostFilter # импортируем недавно написанный фильтр
+from .forms import PostForm # импортируем нашу форму
 
 # Create your views here.
 class PostsList(ListView):
     model = Post                            # указываем модель, объекты которой мы будем выводить
     template_name = 'news.html'             # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
     context_object_name = 'news'            # это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через HTML-шаблон
+    paginate_by = 10  # поставим постраничный вывод в один элемент
     ordering = ['-dataCreation']
-    paginate_by = 5  # поставим постраничный вывод в один элемент
 
 # создаём представление, в котором будут детали конкретного отдельного товара
 class PostsDetail(DetailView):
@@ -19,14 +20,31 @@ class PostsDetail(DetailView):
     template_name = 'new.html'              # название шаблона будет product.html
     context_object_name = 'new'             # название объекта
 
-
 class PostsSearch(ListView):
     model = Post  # указываем модель, объекты которой мы будем выводить
     template_name = 'search.html'  # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
-    #context_object_name = 'search'  # это имя списка, в котором будут лежать все объекты
     ordering = ['-dataCreation']
 
     def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())  # вписываем наш фильтр в контекст
+        context['form'] = PostForm()
         return context
+
+class PostsAdd(ListView):
+    model = Post  # указываем модель, объекты которой мы будем выводить
+    template_name = 'add.html'  # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
+    form_class = PostForm  # добавляем форм класс, чтобы получать доступ к форме через метод POST
+
+    def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
+        context = super().get_context_data(**kwargs)
+        context['form'] = PostForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)  # создаём новую форму, забиваем в неё данные из POST-запроса
+
+        if form.is_valid():  # если пользователь ввёл всё правильно и нигде не накосячил, то сохраняем новый товар
+            form.save()
+
+        return super().get(request, *args, **kwargs)
