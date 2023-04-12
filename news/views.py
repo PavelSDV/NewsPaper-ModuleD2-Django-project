@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
@@ -11,7 +11,7 @@ class PostsList(ListView):
     model = Post                            # указываем модель, объекты которой мы будем выводить
     template_name = 'news.html'             # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
     context_object_name = 'news'            # это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через HTML-шаблон
-    paginate_by = 10  # поставим постраничный вывод в 10 элементов
+    paginate_by = 10                        # поставим постраничный вывод в 10 элементов
     ordering = ['-dataCreation']
 
 # создаём представление, в котором будут детали конкретного отдельного товара
@@ -23,7 +23,6 @@ class PostsDetail(DetailView):
 class PostsSearch(ListView):
     model = Post  # указываем модель, объекты которой мы будем выводить
     template_name = 'search.html'  # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
-    context_object_name = 'search'
     ordering = ['-dataCreation']
 
     def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
@@ -48,6 +47,7 @@ class PostsAdd(CreateView):
 
         if form.is_valid():  # если пользователь ввёл всё правильно и нигде не накосячил, то сохраняем новый товар
             form.save()
+            return redirect(self.success_url)
 
         return super().get(request, *args, **kwargs)
 
@@ -61,8 +61,6 @@ class PostsEdit(UpdateView):
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
-
-
 
 # дженерик для удаления товара
 class PostsDelete(DeleteView):
