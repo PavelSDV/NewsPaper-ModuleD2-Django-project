@@ -3,9 +3,7 @@
 {% load custom_filters %}
 
 <!-- Название у нас будет search -->
-{% block title %}
-Search
-{% endblock title %}
+{% block title %} Search {% endblock title %}
 
 <!-- -----------               -->
 {% block content %}
@@ -15,7 +13,6 @@ Search
         {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы, придётся делать самому -->
         <input type="submit" value="Найти">
     </form>
-
     <table>
         <thead>
             <th>
@@ -42,6 +39,5 @@ Search
         </tr>
         {% endfor %}
     </table>
-
 
 {% endblock content %}
