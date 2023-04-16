@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
 
     'django_filters',
+
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',           # ... include the providers you want to enable:
 ]
 
 SITE_ID = 1
@@ -67,7 +72,7 @@ ROOT_URLCONF = 'NewsPaper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # 'DIRS': [BASE_DIR / 'templates'],
+                    #'DIRS': [BASE_DIR / 'templates'],
         'DIRS': [os.path.join(BASE_DIR, 'templates')], #Если по какой-то причине у вас появляется ошибка, что шаблон default.html не найден, просто поменяйте список TEMPLATES в настройках на следующий (не забудьте импортировать модуль os)
         'APP_DIRS': True,
         'OPTIONS': {
@@ -76,10 +81,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'allauth.socialaccount.providers.google',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
@@ -135,3 +142,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#LOGIN_URL = '/login/'
+# LOGIN_URL = '/accounts/login/'
+
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',                # Needed to login by username in Django admin, regardless of `allauth`
+#     'allauth.account.auth_backends.AuthenticationBackend',      # `allauth` specific authentication methods, such as login by e-mail
+# ]

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator # импортируем класс, позволяющий удобно осуществлять постраничный вывод
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post
 from .filters import PostFilter # импортируем недавно написанный фильтр
@@ -68,3 +69,5 @@ class PostsDelete(DeleteView):
     queryset = Post.objects.all()
     success_url = '/news/'
 
+# class ProtectedView(LoginRequiredMixin, TemplateView):
+#     template_name = 'edit.html'
