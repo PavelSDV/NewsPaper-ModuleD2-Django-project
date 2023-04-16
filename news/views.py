@@ -7,6 +7,9 @@ from .models import Post
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
 
+from django.contrib.auth.models import User
+#from .models import BaseRegisterForm
+
 # Create your views here.
 class PostsList(ListView):
     model = Post                            # указываем модель, объекты которой мы будем выводить
@@ -71,3 +74,21 @@ class PostsDelete(DeleteView):
 
 # class ProtectedView(LoginRequiredMixin, TemplateView):
 #     template_name = 'edit.html'
+
+# class BaseRegisterView(CreateView):
+#     model = User
+#     template_name = 'signup.html'
+#     form_class = BaseRegisterForm
+#     success_url = '/'
+#
+# class LoginView(CreateView):
+#     model = User
+#     template_name = 'login.html'
+#     #form_class = BaseRegisterForm
+#     success_url = '/'
+#
+# class LogoutView(CreateView):
+#     model = User
+#     template_name = 'logout.html'
+#     #form_class = BaseRegisterForm
+#     success_url = '/'
