@@ -5,6 +5,11 @@
 
 {% block content %}
     <h2>Вы действительно хотите удалить данную статью?</h2>
+
+    {% if user.is_authenticated %}
+        <p>Вы аутентифицированы и можете удалить статью</p>
+        <a href="{% url 'account_logout' %}">Выход</a>
+
         <table>
             <tr>
                 <td>
@@ -34,5 +39,13 @@
         {% csrf_token %}
         <input type="submit" value="подтвердить">
     </form>
+
+
+    {% else %}
+        <p>Вы не аутентифицированы и должны войти в систему или зарегистрироваться, чтобы удалить статью</p>
+        <a href="{% url 'account_login' %}">Вход</a>
+        <a href="{% url 'account_signup' %}">Регистрация</a>
+    {% endif %}
+
 
 {% endblock content %}

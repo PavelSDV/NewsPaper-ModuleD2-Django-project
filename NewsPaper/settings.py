@@ -28,9 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'news',
-    'accounts',
 
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -49,9 +45,13 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    #'allauth.socialaccount',
-    #'allauth.socialaccount.providers.google',           # ... include the providers you want to enable:
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+LOGIN_URL = '/accounts/login/'
+
+LOGIN_REDIRECT_URL = '/'
 
 SITE_ID = 1
 
@@ -72,8 +72,6 @@ ROOT_URLCONF = 'NewsPaper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [],
-        #'DIRS': [BASE_DIR / 'templates'],
         'DIRS': [os.path.join(BASE_DIR, 'templates')], #Если по какой-то причине у вас появляется ошибка, что шаблон default.html не найден, просто поменяйте список TEMPLATES в настройках на следующий (не забудьте импортировать модуль os)
         'APP_DIRS': True,
         'OPTIONS': {
@@ -101,6 +99,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',                # Needed to login by username in Django admin, regardless of `allauth`
+    'allauth.account.auth_backends.AuthenticationBackend',      # `allauth` specific authentication methods, such as login by e-mail
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -132,7 +134,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -143,16 +144,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#LOGIN_URL = '/login/'
-LOGIN_URL = '/accounts/login/'
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',                # Needed to login by username in Django admin, regardless of `allauth`
-    'allauth.account.auth_backends.AuthenticationBackend',      # `allauth` specific authentication methods, such as login by e-mail
-]
-
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'news.models.BasicSignupForm'}

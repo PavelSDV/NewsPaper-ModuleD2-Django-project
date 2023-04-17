@@ -1,14 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator # импортируем класс, позволяющий удобно осуществлять постраничный вывод
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
-
-from django.contrib.auth.models import User
-#from .models import BaseRegisterForm
 
 # Create your views here.
 class PostsList(ListView):
@@ -71,24 +67,3 @@ class PostsDelete(DeleteView):
     template_name = 'delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'
-
-# class ProtectedView(LoginRequiredMixin, TemplateView):
-#     template_name = 'edit.html'
-
-# class BaseRegisterView(CreateView):
-#     model = User
-#     template_name = 'signup.html'
-#     form_class = BaseRegisterForm
-#     success_url = '/'
-#
-# class LoginView(CreateView):
-#     model = User
-#     template_name = 'login.html'
-#     #form_class = BaseRegisterForm
-#     success_url = '/'
-#
-# class LogoutView(CreateView):
-#     model = User
-#     template_name = 'logout.html'
-#     #form_class = BaseRegisterForm
-#     success_url = '/'
