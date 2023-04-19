@@ -6,7 +6,7 @@ from .models import Post
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 
@@ -42,11 +42,12 @@ class PostsSearch(ListView):
         context['form'] = PostForm()
         return context
 
-class PostsAdd(LoginRequiredMixin, CreateView):
+class PostsAdd(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post  # указываем модель, объекты которой мы будем выводить
     template_name = 'add.html'  # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
     form_class = PostForm  # добавляем форм класс, чтобы получать доступ к форме через метод POST
     success_url = '/news/'
+    permission_required = ('news.add_post')
 
     def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
         context = super().get_context_data(**kwargs)
@@ -63,11 +64,12 @@ class PostsAdd(LoginRequiredMixin, CreateView):
         return super().get(request, *args, **kwargs)
 
 # дженерик для редактирования объекта
-class PostsEdit(LoginRequiredMixin, UpdateView):
+class PostsEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     template_name = 'edit.html'
     form_class = PostForm
     success_url = '/news/'
+    permission_required = ('news.change_post')
 
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте который мы собираемся редактировать
     def get_object(self, **kwargs):
