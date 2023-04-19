@@ -6,20 +6,16 @@
 
     <h2>Редактировать статью</h2>
 
-    {% if user.is_authenticated %}
-        <p>Вы аутентифицированы и можете просматривать и редактировать страницу</p>
         <a href="{% url 'account_logout' %}">Выход</a>
+
+        {% if is_not_authors %}
+            <button> <a href="/news/edit/"> Хочу Authors!</a> </button>
+        {% endif %}
 
         <form method="POST">
             {% csrf_token %}
             {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
             <input type="submit" value="Редактировать статью">
         </form>
-
-    {% else %}
-        <p>Вы не аутентифицированы и должны войти в систему или зарегистрироваться, чтобы просматривать и редактировать страницу</p>
-        <a href="{% url 'account_login' %}">Вход</a>
-        <a href="{% url 'account_signup' %}">Регистрация</a>
-    {% endif %}
 
 {% endblock content %}

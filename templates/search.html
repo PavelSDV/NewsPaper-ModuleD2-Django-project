@@ -28,7 +28,7 @@
                 author
             </th>
         </thead>
-        {% for post in filter.qs %} <!-- поменяем post на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+        {% for post in filter.qs %} <!--  поменяем post на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
         <tr>
             <td>
                 {{ post.dataCreation|date:'d.m.Y' }}

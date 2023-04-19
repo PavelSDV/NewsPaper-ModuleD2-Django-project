@@ -6,8 +6,6 @@
 
     <h2>Добавить новую статью</h2>
 
-    {% if user.is_authenticated %}
-        <p>Вы аутентифицированы и можете добавить статью</p>
         <a href="{% url 'account_logout' %}">Выход</a>
 
         <form method="POST">
@@ -15,11 +13,5 @@
             {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
             <input type="submit" value="Добавить статью">
         </form>
-
-    {% else %}
-        <p>Вы не аутентифицированы и должны войти в систему или зарегистрироваться, чтобы добавить статью</p>
-        <a href="{% url 'account_login' %}">Вход</a>
-        <a href="{% url 'account_signup' %}">Регистрация</a>
-    {% endif %}
 
 {% endblock content %}
