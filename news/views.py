@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
+from django.shortcuts import render, reverse, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView #, TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
-from .models import Post
+from .models import Post, Category
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
 
@@ -11,6 +11,12 @@ from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 
 from django.contrib.auth.decorators import login_required
+
+from django.views import View
+from django.core.mail import send_mail, EmailMultiAlternatives       # импортируем класс для создание объекта письма с html
+from datetime import datetime
+from django.urls import resolve
+from django.template.loader import render_to_string
 
 # Create your views here.
 class PostsList(ListView):
@@ -103,3 +109,58 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
     return redirect('/')
+
+# class PostsCategoryView(ListView):
+#     model = Post                              # указываем модель, объекты которой мы будем выводить
+#     template_name = 'category.html'           # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
+#     context_object_name = 'posts'             # это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через HTML-шаблон
+#     paginate_by = 10                          # поставим постраничный вывод в 10 элементов
+#     ordering = ['-created_at']
+#
+#     def get_queryset(self):
+#         self.id = resolve(self.request.path_info).kwargs['pk']
+#         с = Category.objects.get(id=self.id)
+#         queryset = Post.objects.filter(category=c)
+#         return queryset
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         user = self.request.user
+#         category = Category.objects.get(id=self.id)
+#         subscribed = category.subscribers.filter(email=user.email)
+#         return context
+#
+# def subscribe_to_category(request, pk):
+#     user = request.user
+#     category = Category.objects.get(id=pk)
+#     if not category.subscribers.filter(id=user.id).exists():
+#         category.subscribers.add(user)
+#         email = user.email
+#         html = render_to_string(
+#             'subscribe.html',
+#             {
+#                 'category': category,
+#                 'user': user,
+#             }
+#         )
+#         msg = EmailMultiAlternatives(
+#             subject=f'{category} subscription',
+#             body='',
+#             from_email='newspaperss@yandex.ru',
+#             to=[email,],
+#         )
+#
+#         msg.attach_alternative(html, ('text/html',))
+#
+#         try:
+#             msg.send()
+#         except Exception as e:
+#             print(e)
+#         return redirect('/')
+#     return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+# def unsubscribe_to_category(request, pk):
+#     user = request.user
+#     category = Category.objects.get(id=pk)

@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import PostsList, PostsDetail, PostsSearch, PostsAdd, PostsEdit, PostsDelete, upgrade_me
+#PostsCategoryView,  subscribe_to_category #, unsubscribe_to_category
+
+# app_name = 'news'
 
 urlpatterns = [                             # path — означает путь. В данном случае путь ко всем товарам у нас останется пустым, позже станет ясно почему
     path('', PostsList.as_view()),          # т.к. сам по себе это класс, то нам надо представить этот класс в виде view. Для этого вызываем метод as_view
@@ -9,4 +12,7 @@ urlpatterns = [                             # path — означает путь
     path('edit/<int:pk>/', PostsEdit.as_view(), name='edit'),
     path('delete/<int:pk>/', PostsDelete.as_view(), name='delete'),
     path('upgrade/', upgrade_me, name = 'upgrade'),
+    # path('category/', PostsCategoryView.as_view(), name='category'),
+    # path('subscribe/<int:pk>/', subscribe_to_category, name='subscribe'),
+    # path('unsubscribe/<int:pk>/', unsubscribe_to_category, name='unsubscribe'),
 ]

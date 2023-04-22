@@ -11,7 +11,9 @@
 
     {% if user.is_authenticated %}
         <p>Вы аутентифицированы</p>
+{#        <a href="{% url 'news:subscribe' category.id %}">Subscribe</a>#}
         <a href="{% url 'account_logout' %}">Выход</a>
+{#        <a href="{% url 'news:subscribe' category.id %}" class="button button-outline">Subscribe</a>#}
 
         {% if is_not_authors %}
             <p>Вы не в группе авторов и не можете добавлять и редактировать статьи</p>
@@ -37,6 +39,12 @@
                 <td>
                     Аннотация
                 </td>
+                  <td>
+                    Автор
+                </td>
+                 <td>
+                    Категория
+                </td>
             </tr>
 {#       {% for new in news reversed %}       <!--Обратный порядок работает только без пагинации Для каждого товара будете генерироваться новая строчка, т.е. новый html код. При этом сам цикл работает точно так же, как и в python. product — переменная цикла, т.е. наш товар, взятый из общего списка -->#}
          {% for new in news %}             <!-- Без reversed статьи при пагинации выводятся на каждой странице вверху более поздняя Для каждого товара будете генерироваться новая строчка, т.е. новый html код. При этом сам цикл работает точно так же, как и в python. product — переменная цикла, т.е. наш товар, взятый из общего списка -->
@@ -49,6 +57,13 @@
                 </td>
                 <td>
                     {{ new.text|truncatechars:50|censor }}
+                </td>
+                 <td>
+                    {{ new.author.authorUser }}
+                </td>
+                <td>
+                    {% if new.postCategory.first.name %}{{ new.postCategory.first.name }}{% else %}Нет категории{% endif %}
+{#                    {{ new.postCategory.first.name }}#}
                 </td>
                 <td>
                     <a href="{% url 'edit' new.id %}"><u>Редактировать</u></a>
