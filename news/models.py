@@ -28,7 +28,7 @@ class Category(models.Model):
 
     subscribers = models.ManyToManyField(User, blank=True)
 
-    def scribers(self):
+    def subscribe(self):
         pass
     def get_category(self):
         return self.name
@@ -62,7 +62,6 @@ class Post(models.Model):
     def preview(self):
         return self.text[0:123] + '...'
 
-    # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
     def get_absolute_url(self):
         return f'/news/ {self.id}'
 

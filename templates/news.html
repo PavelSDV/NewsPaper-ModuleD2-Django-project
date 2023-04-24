@@ -43,7 +43,7 @@
                     Автор
                 </td>
                  <td>
-                    Категория
+                     Категория
                 </td>
             </tr>
 {#       {% for new in news reversed %}       <!--Обратный порядок работает только без пагинации Для каждого товара будете генерироваться новая строчка, т.е. новый html код. При этом сам цикл работает точно так же, как и в python. product — переменная цикла, т.е. наш товар, взятый из общего списка -->#}
@@ -62,8 +62,13 @@
                     {{ new.author.authorUser }}
                 </td>
                 <td>
-                    {% if new.postCategory.first.name %}{{ new.postCategory.first.name }}{% else %}Нет категории{% endif %}
-{#                    {{ new.postCategory.first.name }}#}
+{#                    {% if new.postCategory.first.name %}#}
+                    {% if new.postCategory.exists %}
+                         <a href="{% url 'category' new.id %}">{{ new.postCategory.first.name }}</a>
+{#                         {{ new.postCategory.first.name }}#}
+                    {% else %}
+                        Нет категории
+                    {% endif %}
                 </td>
                 <td>
                     <a href="{% url 'edit' new.id %}"><u>Редактировать</u></a>

@@ -1,23 +1,23 @@
 {% extends 'flatpages/default.html' %}
 
-{% block title %} Categoryes {% endblock title %}
-
+{% block title %} News {% endblock title %}
 
 {% block content %}
 
-    <h1>Список категорий</h1>
+    {% if category.id %}
 
-{#    {% if category.id %}#}
-    <div>
-        <em>
-            Subscribe to
-{#        <strong>{{ category }}?</strong>#}
-        </em>
+        <div>
+            <em>
+                Subscribe to
+                <strong>{{ category }}?</strong>
+            </em>
 
-{#        <a href="{% url 'news:subscribe' category.id %}">Subscribe</a>#}
-    </div>
+            <a href="{% url 'subscribe' category.id %}">Subscribe</a>
+
+        </div>
+
     {% endif %}
 
-{#    {% include 'news/inc/posts.html' %}#}
+    {% include 'posts.html' %}
 
 {% endblock content %}

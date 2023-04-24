@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView #, TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
-from .models import Post, Category
+from .models import Post, Category, PostCategory, Author, Comment
 from .filters import PostFilter # импортируем недавно написанный фильтр
 from .forms import PostForm # импортируем нашу форму
 
@@ -102,6 +102,7 @@ class BasicSignupForm(SignupForm):
         basic_group.user_set.add(user)
         return user
 
+# в группу авторов
 @login_required
 def upgrade_me(request):
     user = request.user
@@ -110,54 +111,57 @@ def upgrade_me(request):
         authors_group.user_set.add(user)
     return redirect('/')
 
-# class PostsCategoryView(ListView):
-#     model = Post                              # указываем модель, объекты которой мы будем выводить
-#     template_name = 'category.html'           # указываем имя шаблона, в котором будет лежать HTML, в нём будут все инструкции о том, как именно пользователю должны вывестись наши объекты
-#     context_object_name = 'posts'             # это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через HTML-шаблон
-#     paginate_by = 10                          # поставим постраничный вывод в 10 элементов
-#     ordering = ['-created_at']
-#
-#     def get_queryset(self):
-#         self.id = resolve(self.request.path_info).kwargs['pk']
-#         с = Category.objects.get(id=self.id)
-#         queryset = Post.objects.filter(category=c)
-#         return queryset
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         user = self.request.user
-#         category = Category.objects.get(id=self.id)
-#         subscribed = category.subscribers.filter(email=user.email)
-#         return context
-#
-# def subscribe_to_category(request, pk):
-#     user = request.user
-#     category = Category.objects.get(id=pk)
-#     if not category.subscribers.filter(id=user.id).exists():
-#         category.subscribers.add(user)
-#         email = user.email
-#         html = render_to_string(
-#             'subscribe.html',
-#             {
-#                 'category': category,
-#                 'user': user,
-#             }
-#         )
-#         msg = EmailMultiAlternatives(
-#             subject=f'{category} subscription',
-#             body='',
-#             from_email='newspaperss@yandex.ru',
-#             to=[email,],
-#         )
-#
-#         msg.attach_alternative(html, ('text/html',))
-#
-#         try:
-#             msg.send()
-#         except Exception as e:
-#             print(e)
-#         return redirect('/')
-#     return redirect(request.META.get('HTTP_REFERER'))
+class PostCategoryView(ListView):
+    model = Post
+    template_name = 'category.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+    ordering = ['-dataCreation']
+
+    def get_queryset(self):
+        self.id = resolve(self.request.path_info).kwargs['pk']
+        c = Category.objects.get(id=self.id)
+        queryset = Post.objects.filter(category=c)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        category = Category.objects.get(id=self.id)
+        subscribed = category.subscribers.filter(email=user.email)
+        if not subscribed:
+            context['category'] = category
+
+        return context
+
+def subscribe_to_category(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    if not category.subscribers.filter(id=user.id).exists():
+        category.subscribers.add(user)
+        email = user.email
+        html = render_to_string(
+            'subscribe.html',
+            {
+                'category': category,
+                'user': user,
+            }
+        )
+        msg = EmailMultiAlternatives(
+            subject=f'{category} subscription',
+            body='',
+            from_email='newspaperss@yandex.ru',
+            to=[email,],
+        )
+
+        msg.attach_alternative(html, ('text/html',))
+
+        try:
+            msg.send()
+        except Exception as e:
+            print(e)
+        return redirect('/')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 
