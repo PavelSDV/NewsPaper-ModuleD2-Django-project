@@ -2,8 +2,10 @@
 
 {% block title %} News {% endblock title %}
 
+
 {% block content %}
 
+    {{ request.user.username }}
     {% if category.id %}
 
         <div>
@@ -14,8 +16,11 @@
 
             <a href="{% url 'subscribe' category.id %}">Subscribe</a>
 
+
         </div>
 
+    {% else %}
+            Вы подписаны
     {% endif %}
 
     {% include 'posts.html' %}

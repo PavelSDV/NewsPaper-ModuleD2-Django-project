@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import PostsList, PostsDetail, PostsSearch, PostsAdd, PostsEdit, PostsDelete, upgrade_me, \
-    PostCategoryView, subscribe_to_category #, unsubscribe_to_category
+    PostCategoryView, subscribe_to_category, unsubscribe_to_category
 
 
 urlpatterns = [                             # path — означает путь. В данном случае путь ко всем товарам у нас останется пустым, позже станет ясно почему
@@ -13,5 +13,5 @@ urlpatterns = [                             # path — означает путь
     path('upgrade/', upgrade_me, name = 'upgrade'),
     path('category/<int:pk>/', PostCategoryView.as_view(), name='category'),
     path('subscribe/<int:pk>/', subscribe_to_category, name='subscribe'),
-    # path('unsubscribe/<int:pk>/', unsubscribe_to_category, name='unsubscribe'),
+    path('unsubscribe/<int:pk>/', unsubscribe_to_category, name='unsubscribe'),
 ]

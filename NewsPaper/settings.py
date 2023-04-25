@@ -158,5 +158,5 @@ EMAIL_HOST_USER = 'newspaperss' # ваше имя пользователя, на
 EMAIL_HOST_PASSWORD = 'Qwerty1!2@3#' # пароль от почты
 EMAIL_USE_SSL = True # Яндекс использует ssl, подробнее о том, что это, почитайте на Википедии, но включать его здесь обязательно
 
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

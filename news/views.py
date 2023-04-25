@@ -1,6 +1,5 @@
 from django.shortcuts import render, reverse, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
-    DeleteView  # , TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView  # , TemplateView   # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
 from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
 from .models import Post, Category, PostCategory, Author, Comment
@@ -147,7 +146,7 @@ class PostCategoryView(ListView):
 
         return context
 
-
+@login_required
 def subscribe_to_category(request, pk):
     user = request.user
     category = Category.objects.get(id=pk)
@@ -166,17 +165,22 @@ def subscribe_to_category(request, pk):
             body='',
             from_email='newspaperss@yandex.ru',
             to=[email, ],
+            # to=['sdpv@mail.ru', ],
         )
 
-        msg.attach_alternative(html, ('text/html',))
+        msg.attach_alternative(html, 'text/html', )
 
         try:
             msg.send()
         except Exception as e:
             print(e)
-        return redirect('/')
+        return redirect('/news/')
     return redirect(request.META.get('HTTP_REFERER'))
 
-# def unsubscribe_to_category(request, pk):
-#     user = request.user
-#     category = Category.objects.get(id=pk)
+@login_required
+def unsubscribe_to_category(request, pk):
+    user = request.user
+    c = Category.objects.get(id=pk)
+    if c.subscribers.filter(id=user.id).exists():
+        c.subscribers.remove(user)
+    return redirect('/news/')

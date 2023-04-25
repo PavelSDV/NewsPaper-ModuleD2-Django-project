@@ -7,7 +7,6 @@
 <p>
     By <span>{{ post.author.authorUser }},</span>
     on <span>{{ post.dataCreation }},</span>
-{#    Category: {{ post.postCategory.values }}#}
     {%  for c in post.postCategory.values %}
     <a href="{%  url 'category' c.id %}">{{ c.name }}</a>
     {% endfor %}

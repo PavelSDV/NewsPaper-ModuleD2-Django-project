@@ -10,7 +10,8 @@
 <h1>Все статьи</h1>
 
     {% if user.is_authenticated %}
-        <p>Вы аутентифицированы</p>
+        <p>Вы аутентифицированы, {{ request.user.username }} </p>
+        <p>Вы подписаны на категории, {{ category.id }} </p>
 {#        <a href="{% url 'news:subscribe' category.id %}">Subscribe</a>#}
         <a href="{% url 'account_logout' %}">Выход</a>
 {#        <a href="{% url 'news:subscribe' category.id %}" class="button button-outline">Subscribe</a>#}
