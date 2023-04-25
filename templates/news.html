@@ -62,10 +62,8 @@
                     {{ new.author.authorUser }}
                 </td>
                 <td>
-{#                    {% if new.postCategory.first.name %}#}
                     {% if new.postCategory.exists %}
-                         <a href="{% url 'category' new.id %}">{{ new.postCategory.first.name }}</a>
-{#                         {{ new.postCategory.first.name }}#}
+                         <a href="{% url 'category' new.postCategory.first.id %}">{{ new.postCategory.first.name }}</a>
                     {% else %}
                         Нет категории
                     {% endif %}
