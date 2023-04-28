@@ -166,7 +166,6 @@ def subscribe_to_category(request, pk):
             body='',
             from_email='newspaperss@yandex.ru',
             to=[email, ],
-            # to=['sdpv@mail.ru', ],
         )
 
         msg.attach_alternative(html, 'text/html', )

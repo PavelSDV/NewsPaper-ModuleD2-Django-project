@@ -12,24 +12,6 @@
     {% if user.is_authenticated %}
         <p>Вы аутентифицированы, {{ request.user.username }} </p>
 
-{#        <p>Вы подписаны на категории,#}
-{##}
-{#            {{ request.category.name }}#}
-{#            {{ category.id.name }}#}
-{#            {{ post.author }}#}
-{##}
-{#            {{ user.username }}#}
-{#            {{ category.get_category }}#}
-{#            {%  for category in category.id %}#}
-{#                {{ category.get_category }}#}
-{#            {% endfor %}#}
-{##}
-{#            {{ subscribes.category.first.name }}#}
-{#            {{ postCategory.subscribers}}#}
-{##}
-{##}
-{#        </p>#}
-
         <a href="{% url 'account_logout' %}">Выход</a>
 
         {% if is_not_authors %}
@@ -79,12 +61,8 @@
                     {{ new.author.authorUser }}
                 </td>
                 <td>
-{#                    {% if new.postCategory.exists %}#}
                     {% if new.category.exists %}
-{#                         <a href="{% url 'category' new.postCategory.first.id %}">{{ new.postCategory.first.name }}</a>#}
                          <a href="{% url 'category' new.category.first.id %}">{{ new.category.first.name }}</a>
-{#                         <a href="{% url 'category' category.id %}">{{ new.category.id }}</a>#}
-{#                        {{ new.category.first.name }}#}
                     {% else %}
                         Нет категории
                     {% endif %}

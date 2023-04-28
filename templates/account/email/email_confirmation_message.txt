@@ -2,6 +2,6 @@
 {% load account %}
 {% load i18n %}
 
-{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}You're receiving this e-mail because user {{ user_display }} has given your e-mail address to register an account on {{ site_domain }}.
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Вы получили это электронное письмо, потому что пользователь {{ user_display }} предоставил ваш адрес электронной почты для регистрации учетной записи на {{ site_domain }}.
 
-To confirm this is correct, go to {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}
+Чтобы убедиться, что это правильно, перейдите к {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}

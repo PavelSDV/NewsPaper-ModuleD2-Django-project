@@ -23,12 +23,6 @@
 
     {% else %}
         Вы подписаны
-{#        {%  for category in categories %}#}
-{#            {{ category.get_category }}#}
-{#            <a href="{% url 'unsubscribe' category.id %}">Subscribe</a>#}
-{#        {% endfor %}#}
-
-
     {% endif %}
 
     {% include 'posts.html' %}

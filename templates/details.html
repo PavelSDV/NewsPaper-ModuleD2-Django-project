@@ -9,7 +9,6 @@
     on <span>{{ post.dataCreation }},</span>
 
     {%  for c in post.category.values %}
-{#    {%  for c in post.postCategory.values %}#}
         <a href="{%  url 'category' c.id %}">{{ c.name }}</a>
     {% endfor %}
 </p>

@@ -8,5 +8,4 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'text', 'author', 'category', 'check_box']  # не забываем включить галочку в поля, иначе она не будет показываться на странице!
-        # fields = ['title', 'text', 'author', 'postCategory', 'check_box']  # не забываем включить галочку в поля, иначе она не будет показываться на странице!
 
