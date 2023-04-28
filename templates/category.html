@@ -5,22 +5,30 @@
 
 {% block content %}
 
-    {{ request.user.username }}
+{#    {{  request.user.username }}#}
+    {{  user.username }}
+
     {% if category.id %}
 
         <div>
+            <form style="display: inline-block" method="LINK" action="{% url 'subscribe' category.id %}">
+                <input type="submit" value="Subscribe">
+            </form>
             <em>
-                Subscribe to
+                to
                 <strong>{{ category }}?</strong>
             </em>
-
-            <a href="{% url 'subscribe' category.id %}">Subscribe</a>
-
-
+{#            <a href="{% url 'subscribe' category.id %}">Subscribe</a>#}
         </div>
 
     {% else %}
-            Вы подписаны
+        Вы подписаны
+{#        {%  for category in categories %}#}
+{#            {{ category.get_category }}#}
+{#            <a href="{% url 'unsubscribe' category.id %}">Subscribe</a>#}
+{#        {% endfor %}#}
+
+
     {% endif %}
 
     {% include 'posts.html' %}

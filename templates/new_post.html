@@ -1,0 +1,19 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+New Post
+{% endblock title %}
+
+{% block content %}
+<h1>Здравствуй, username. Новая статья в твоем любимом разделе:</h1>
+    <p>
+    <strong>{{ category.name }}</strong>
+        автор:
+    <strong>{{ post.author.authorUser }}</strong>
+    </p>
+    <a href="http://localhost:8002{% url 'new' post.id %}"><р2>{{ post.title }}</р2></a>
+    <p>
+    {{ post.email_preview }}
+    </p>
+
+{% endblock content %}

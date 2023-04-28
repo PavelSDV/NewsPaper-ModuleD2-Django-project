@@ -46,7 +46,8 @@ class Post(models.Model):
     )
     categoryType = models.CharField(max_length=2, choices = CATEGORY_CHOICES, default=ARTICLE)
     dataCreation = models.DateTimeField(auto_now_add=True)
-    postCategory = models.ManyToManyField('Category', through='PostCategory')
+    # postCategory = models.ManyToManyField('Category', through='PostCategory')
+    category = models.ManyToManyField('Category', through='PostCategory')
     title = models.CharField(max_length=128)
     text = models.TextField()
     rating = models.SmallIntegerField(default=0)
@@ -62,12 +63,18 @@ class Post(models.Model):
     def preview(self):
         return self.text[0:123] + '...'
 
+    def email_preview(self):
+        return f'{self.text[0:49]}...'
+
     def get_absolute_url(self):
         return f'/news/ {self.id}'
 
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.postThrough.title + ' ' + self.categoryThrough.name
 
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)

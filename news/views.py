@@ -133,7 +133,8 @@ class PostCategoryView(ListView):
     def get_queryset(self):
         self.id = resolve(self.request.path_info).kwargs['pk']
         c = Category.objects.get(id=self.id)
-        queryset = Post.objects.filter(postCategory=c)
+        # queryset = Post.objects.filter(postCategory=c)
+        queryset = Post.objects.filter(category=c)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -177,6 +178,7 @@ def subscribe_to_category(request, pk):
         return redirect('/news/')
     return redirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required
 def unsubscribe_to_category(request, pk):
     user = request.user
@@ -184,3 +186,4 @@ def unsubscribe_to_category(request, pk):
     if c.subscribers.filter(id=user.id).exists():
         c.subscribers.remove(user)
     return redirect('/news/')
+

@@ -11,10 +11,26 @@
 
     {% if user.is_authenticated %}
         <p>Вы аутентифицированы, {{ request.user.username }} </p>
-        <p>Вы подписаны на категории, {{ category.id }} </p>
-{#        <a href="{% url 'news:subscribe' category.id %}">Subscribe</a>#}
+
+{#        <p>Вы подписаны на категории,#}
+{##}
+{#            {{ request.category.name }}#}
+{#            {{ category.id.name }}#}
+{#            {{ post.author }}#}
+{##}
+{#            {{ user.username }}#}
+{#            {{ category.get_category }}#}
+{#            {%  for category in category.id %}#}
+{#                {{ category.get_category }}#}
+{#            {% endfor %}#}
+{##}
+{#            {{ subscribes.category.first.name }}#}
+{#            {{ postCategory.subscribers}}#}
+{##}
+{##}
+{#        </p>#}
+
         <a href="{% url 'account_logout' %}">Выход</a>
-{#        <a href="{% url 'news:subscribe' category.id %}" class="button button-outline">Subscribe</a>#}
 
         {% if is_not_authors %}
             <p>Вы не в группе авторов и не можете добавлять и редактировать статьи</p>
@@ -63,8 +79,12 @@
                     {{ new.author.authorUser }}
                 </td>
                 <td>
-                    {% if new.postCategory.exists %}
-                         <a href="{% url 'category' new.postCategory.first.id %}">{{ new.postCategory.first.name }}</a>
+{#                    {% if new.postCategory.exists %}#}
+                    {% if new.category.exists %}
+{#                         <a href="{% url 'category' new.postCategory.first.id %}">{{ new.postCategory.first.name }}</a>#}
+                         <a href="{% url 'category' new.category.first.id %}">{{ new.category.first.name }}</a>
+{#                         <a href="{% url 'category' category.id %}">{{ new.category.id }}</a>#}
+{#                        {{ new.category.first.name }}#}
                     {% else %}
                         Нет категории
                     {% endif %}
