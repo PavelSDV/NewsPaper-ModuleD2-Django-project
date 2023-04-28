@@ -127,13 +127,12 @@ class PostCategoryView(ListView):
     model = Post
     template_name = 'category.html'
     context_object_name = 'posts'
-    # paginate_by = 5
+    paginate_by = 3
     ordering = ['-dataCreation']
 
     def get_queryset(self):
         self.id = resolve(self.request.path_info).kwargs['pk']
         c = Category.objects.get(id=self.id)
-        # queryset = Post.objects.filter(postCategory=c)
         queryset = Post.objects.filter(category=c)
         return queryset
 
@@ -166,7 +165,7 @@ def subscribe_to_category(request, pk):
             body='',
             from_email='newspaperss@yandex.ru',
             to=[email, ],
-        )
+                                                                                                                                                                                                                                                    )
 
         msg.attach_alternative(html, 'text/html', )
 

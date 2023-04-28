@@ -8,6 +8,8 @@
     By <span>{{ post.author.authorUser }},</span>
     on <span>{{ post.dataCreation }},</span>
 
+
+
     {%  for c in post.category.values %}
         <a href="{%  url 'category' c.id %}">{{ c.name }}</a>
     {% endfor %}

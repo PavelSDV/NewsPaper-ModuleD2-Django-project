@@ -5,8 +5,7 @@
 
 {% block content %}
 
-{#    {{  request.user.username }}#}
-    {{  user.username }}
+    Пользователь {{ user.username }}
 
     {% if category.id %}
 
@@ -18,13 +17,51 @@
                 to
                 <strong>{{ category }}?</strong>
             </em>
-{#            <a href="{% url 'subscribe' category.id %}">Subscribe</a>#}
         </div>
 
-    {% else %}
-        Вы подписаны
+      {% else %}
+
+        {% if user.category_set.filter %}
+            подписан на категории:<br>
+            {% for category in user.category_set.filter %}
+                {{ category }}
+                 <form style="display: inline-block" method="LINK" action="{% url 'unsubscribe' category.id %}">
+                <input type="submit" value="Unubscribe">
+            </form><br>
+{#                <a href="{% url 'unsubscribe' category.id %}">Отписаться</a><br>#}
+            {% endfor %}
+
+        {% endif %}
+
     {% endif %}
 
+
     {% include 'posts.html' %}
+
+            <!-- Проверяем что поддерживается постраничный вывод -->
+        {% if is_paginated %}
+
+            <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+            {% if page_obj.has_previous %}
+                <a href="?page=1">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+            {% endif %}
+
+            <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a>{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">>>></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        {% endif %}
+
 
 {% endblock content %}
