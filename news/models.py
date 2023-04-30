@@ -46,7 +46,7 @@ class Post(models.Model):
     )
     categoryType = models.CharField(max_length=2, choices = CATEGORY_CHOICES, default=ARTICLE)
     dataCreation = models.DateTimeField(auto_now_add=True)
-    # postCategory = models.ManyToManyField('Category', through='PostCategory')
+    # dataUpdate = models.DateTimeField(auto_now=True)
     category = models.ManyToManyField('Category', through='PostCategory')
     title = models.CharField(max_length=128)
     text = models.TextField()
@@ -68,6 +68,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return f'/news/ {self.id}'
+
+    def __str__(self):
+        return self.title
 
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)

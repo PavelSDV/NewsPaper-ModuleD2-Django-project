@@ -26,8 +26,9 @@
             {% for category in user.category_set.filter %}
                 {{ category }}
                  <form style="display: inline-block" method="LINK" action="{% url 'unsubscribe' category.id %}">
-                <input type="submit" value="Unubscribe">
-            </form><br>
+                    <input type="submit" value="Unubscribe">
+                 </form>
+                <br>
 {#                <a href="{% url 'unsubscribe' category.id %}">Отписаться</a><br>#}
             {% endfor %}
 
