@@ -15,60 +15,28 @@ from django_apscheduler import util
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 import datetime
+from django.utils import timezone
 from news.models import Post, Category, PostCategory
 
 
 logger = logging.getLogger(__name__)
 
 
-# def notify_subscribers_weekly():
-#     print("Notifier is running")
-#     # categories = Category.objects.all()
-#     posts = Post.objects.all()
-#     # current_site = Site.objects.get_current()
-#     # site_link = f"http://{current_site.name}"
-#     date = datetime.datetime.today()
-#     week = date.strftime("%V")
-#     for category in categories:
-#         subscribers_list = PostCategory.objects.filter(categoryThrough=category)
-#         # posts = Post.objects.filter(category=category).filter(dataCreation__week=date.today().isocalendar()[1]-1)
-#         posts = Post.objects.filter(category=category).filter(dataCreation__week=week)
-#         if posts.count()>0:
-#             for each in subscribers_list:
-#                 hello_text = f'Здравствуй, {each.user}. Подборка статей за неделю в твоём любимом разделе {category}!\n'
-#                 header = 'Подборка статей за неделю'
-#                 html_content = render_to_string('weekly_mail.html',
-#                                                 # {'header': header, 'hello_text': hello_text, 'posts': posts, 'category': category, 'site_link': site_link})
-#                                                 {'header': header, 'hello_text': hello_text, 'posts': posts, 'site_link': site_link})
-#                 msg = EmailMultiAlternatives(
-#                 subject=email_subject,
-#                 body='',
-#                 from_email='newspaperss@yandex.ru',
-#                 to=[each.user.email],
-#                 )
-#                 msg.attach_alternative(html_content, "text/html") # добавляем html
-#                 msg.send()
-
-
-def get_subscriber(category):
-    user_email = []
-    for user in category.subscribers.all():
-        user_email.append(user.email)
-    return user_email # список эл.адресов подписчиков категории
-
-
 def notify_subscribers_weekly():
     template = 'weekly_mail.html'
 
-    date = datetime.datetime.today()
-    week = date.strftime("%V")
+    # date = datetime.datetime.today()  # фильтрует по номеру недели, т.е. нельзя в понедельник в 9-00 присылать,
+    # week = date.strftime("%V")          # т.к. только будут посты прошедшие 9 часов недели
+    # posts = Post.objects.filter(dataCreation__week=week) # поэтомы рассылка в воскресенье 23-59 должна быть
 
-    posts = Post.objects.all().filter(dataCreation__week=week)
+    week = timezone.now() - datetime.timedelta(days=7) # здесь за прошедшие 7 дней, в любое время
+    posts = Post.objects.filter(dataCreation__gte=week)
 
     for post in posts:
-        for category in Category.objects.all():
+        categories = post.category.all()
+        for category in categories:
             email_subject = f'News week in category: "{category}"'
-            user_email = get_subscriber(category)
+            user_email = category.subscribers.values_list('email', flat=True)
 
             html = render_to_string(
                 template_name=template,
@@ -86,16 +54,6 @@ def notify_subscribers_weekly():
 
             msg.attach_alternative(html, 'text/html', )
             msg.send()
-
-
-# наша задача по выводу текста на экран
-# def send_digest():
-#     send_mail(
-#         'Job mail',
-#         'hello from job!',
-#         from_email='newspaperss@yandex.ru',
-#         recipient_list=['sdpv@mail.ru'],
-#     )
 
 
 # функция которая будет удалять неактуальные задачи

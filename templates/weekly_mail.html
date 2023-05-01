@@ -12,29 +12,10 @@
         автор:
     <strong>{{ post.author.authorUser }}</strong>
     </p>
-{#    <a href="http://localhost:8002{% url 'new' post.id %}"><р2>{{ post.title }}</р2></a>#}
+    <a href="http://localhost:8002{% url 'new' post.id %}"><р2>{{ post.title }}</р2></a>
     <р2>{{ post.title }}</р2>
     <p>
     {{ post.email_preview }}
     </p>
-
-
-{##}
-{#    {% for post in posts %}#}
-{##}
-{#        <p>{{ post.author.username.first_name}} {{ post.author.username.last_name}} [{{ post.creation_date_time| date:'d-M-Y g:i' }}] <a href="{{site_link}}{% url 'details' post.id %}">{{ post.header }}</a></p>#}
-{#        <h3>#}
-{#           {{ post.title|censor }}#}
-{#        </h3>#}
-{#        <p>#}
-{#            By <span>{{ post.author.authorUser }},</span>#}
-{#            on <span>{{ post.dataCreation|date:'d.m.Y g:i' }},</span>#}
-{#            {%  for c in post.category.values %}#}
-{#                <a href="{%  url 'category' c.id %}">{{ c.name }}</a>#}
-{#            {% endfor %}#}
-{#        </p>#}
-{#        <p> {{ post.text|censor }} </p>#}
-{##}
-{#    {% endfor %}#}
 
 {% endblock content %}
