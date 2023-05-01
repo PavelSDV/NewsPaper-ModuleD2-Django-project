@@ -21,13 +21,18 @@ from news.models import Post, Category, PostCategory
 
 logger = logging.getLogger(__name__)
 
+def get_subscriber(category):
+    user_email = []
+    for user in category.subscribers.all():
+        user_email.append(user.email)
+    return user_email
 
 def notify_subscribers_weekly():
     template = 'weekly_mail.html'
 
     # date = datetime.datetime.today()  # фильтрует по номеру недели, т.е. нельзя в понедельник в 9-00 присылать,
     # week = date.strftime("%V")          # т.к. только будут посты прошедшие 9 часов недели
-    # posts = Post.objects.filter(dataCreation__week=week) # поэтомы рассылка в воскресенье 23-59 должна быть
+    # posts = Post.objects.filter(dataCreation__week=week) # поэтому рассылка в воскресенье 23-59 должна быть
 
     week = timezone.now() - datetime.timedelta(days=7) # здесь за прошедшие 7 дней, в любое время
     posts = Post.objects.filter(dataCreation__gte=week)
@@ -36,7 +41,8 @@ def notify_subscribers_weekly():
         categories = post.category.all()
         for category in categories:
             email_subject = f'News week in category: "{category}"'
-            user_email = category.subscribers.values_list('email', flat=True)
+            user_email = get_subscriber(category)
+            # user_email = category.subscribers.values_list('email', flat=True)  # можно и так без функции
 
             html = render_to_string(
                 template_name=template,
