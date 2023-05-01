@@ -18,6 +18,8 @@ from datetime import datetime
 from django.urls import resolve
 from django.template.loader import render_to_string
 
+from datetime import date
+from django.contrib import messages
 
 # Create your views here.
 class PostsList(ListView):
@@ -50,7 +52,7 @@ class PostsSearch(ListView):
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET,
                                        queryset=self.get_queryset())  # вписываем наш фильтр в контекст
-        context['form'] = PostForm()
+        # context['form'] = PostForm()
         return context
 
 
@@ -61,14 +63,19 @@ class PostsAdd(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = '/news/'
     permission_required = ('news.add_post')
 
-    def get_context_data(self,
-                         **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
+    def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
         context = super().get_context_data(**kwargs)
         context['form'] = PostForm()
         return context
 
     def post(self, request, *args, **kwargs):
+        author = request.POST['author']
         form = self.form_class(request.POST)  # создаём новую форму, забиваем в неё данные из POST-запроса
+
+        publications = Post.objects.filter(author=Author.objects.get(authorUser=author))\
+            .filter(dataCreation__date=date.today())
+        if publications.count() >= 3:
+            return render(request, 'manyposts.html')
 
         if form.is_valid():  # если пользователь ввёл всё правильно и нигде не накосячил, то сохраняем новый товар
             form.save()
