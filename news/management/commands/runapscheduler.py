@@ -21,46 +21,47 @@ from news.models import Post, Category, PostCategory
 
 logger = logging.getLogger(__name__)
 
-def get_subscriber(category):
-    user_email = []
-    for user in category.subscribers.all():
-        user_email.append(user.email)
-    return user_email
 
 def notify_subscribers_weekly():
     template = 'weekly_mail.html'
+    date = datetime.datetime.today()
 
     # date = datetime.datetime.today()  # фильтрует по номеру недели, т.е. нельзя в понедельник в 9-00 присылать,
     # week = date.strftime("%V")          # т.к. только будут посты прошедшие 9 часов недели
     # posts = Post.objects.filter(dataCreation__week=week) # поэтому рассылка в воскресенье 23-59 должна быть
 
-    week = timezone.now() - datetime.timedelta(days=7) # здесь за прошедшие 7 дней, в любое время
+    week = timezone.now() - datetime.timedelta(days=7) # здесь за прошедшие 7 дней, в любое время, вроде
     posts = Post.objects.filter(dataCreation__gte=week)
 
+    # создаем словарь, где ключом является объект Category, а значением - список связанных с данной категорией постов
+    categories_posts_dict = {}
     for post in posts:
         categories = post.category.all()
         for category in categories:
-            email_subject = f'News week in category: "{category}"'
-            user_email = get_subscriber(category)
-            # user_email = category.subscribers.values_list('email', flat=True)  # можно и так без функции
+            if category not in categories_posts_dict:
+                categories_posts_dict[category] = []
+            categories_posts_dict[category].append(post)
 
-            html = render_to_string(
-                template_name=template,
-                context={
-                    'category': category,
-                    'post': post,
-                },
-            )
-            msg = EmailMultiAlternatives(
-                subject=email_subject,
-                body='',
-                from_email='newspaperss@yandex.ru',
-                to=user_email,
-            )
+    # проходимся по словарю и отправляем по одному письму на всех подписчиков категории
+    for category, posts in categories_posts_dict.items():
+        email_subject = f'News week in category: "{category}"'
+        subscribers_emails = category.subscribers.values_list('email', flat=True)
+        html = render_to_string(
+            template_name=template,
+            context={
+                'category': category,
+                'posts': posts,
+            },
+        )
+        msg = EmailMultiAlternatives(
+            subject=email_subject,
+            body='',
+            from_email='newspaperss@yandex.ru',
+            to=subscribers_emails,
+        )
 
-            msg.attach_alternative(html, 'text/html', )
-            msg.send()
-
+        msg.attach_alternative(html, 'text/html', )
+        msg.send()
 
 # функция которая будет удалять неактуальные задачи
 @util.close_old_connections
@@ -87,7 +88,7 @@ class Command(BaseCommand):
             max_instances=1,
             replace_existing=True,
         )
-        logger.info("Added job 'send_digest'.")
+        logger.info("Added job 'notify_subscribers_weekly'.")
 
         scheduler.add_job(
             delete_old_job_executions,
