@@ -155,6 +155,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/news/'
 
+# ACCOUNT_CONFIRM_EMAIL_ON_GET = False
+
 ACCOUNT_FORMS = {'signup': 'news.views.BasicSignupForm'}
 
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
@@ -165,7 +167,6 @@ EMAIL_USE_SSL = True  # Яндекс использует ssl, подробне�
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 DEFAULT_FROM_EMAIL = 'newspaperss@yandex.ru'
 

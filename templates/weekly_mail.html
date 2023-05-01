@@ -7,8 +7,8 @@
 <h1>Новости недели в категории: "{{ category.name }}"</h1>
     {% if posts %}
         {% for post in posts %}
-            <p>автор: {{ post.author.authorUser }}<a href="http://localhost:8002{% url 'new' post.id %}"><р2>Статья: {{ post.title }}</р2></a></p>
-            <p>Аннотация: {{ post.email_preview }}</p>
+            <p>автор: {{ post.author.authorUser }}<a href="http://localhost:8002{% url 'new' post.id %}"><р2>Статья: {{ post.title|censor }}</р2></a></p>
+            <p>Аннотация: {{ post.email_preview|censor }}</p>
         {% endfor %}
     {% else %}
         <h2>No Posts</h2>
