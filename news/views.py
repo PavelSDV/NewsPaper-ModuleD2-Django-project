@@ -21,7 +21,7 @@ from django.template.loader import render_to_string
 from datetime import date
 from django.contrib import messages
 
-from django.core.cache import cache         # импортируем наш кэш
+# from django.core.cache import cache         # caching  commit37
 
 # Create your views here.
 class PostsList(ListView):
@@ -42,16 +42,18 @@ class PostsDetail(DetailView):
     model = Post  # модель всё та же, но мы хотим получать детали конкретно отдельного товара
     template_name = 'new.html'  # название шаблона будет product.html
     context_object_name = 'new'  # название объекта
-    queryset = Post.objects.all()
 
-    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
-        obj = cache.get(f'post-{self.kwargs["pk"]}',  None)  # кэш очень похож на словарь, и метод get действует также. Он забирает значение по ключу, если его нет, то забирает None.
-
-        if not obj:             # если объекта нет в кэше, то получаем его и записываем в кэш
-            obj = super().get_object(queryset=self.queryset)
-            cache.set(f'post-{self.kwargs["pk"]}', obj)
-
-        return obj
+    # caching  commit37
+    # queryset = Post.objects.all()
+    #
+    # def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+    #     obj = cache.get(f'post-{self.kwargs["pk"]}',  None)  # кэш очень похож на словарь, и метод get действует также. Он забирает значение по ключу, если его нет, то забирает None.
+    #
+    #     if not obj:             # если объекта нет в кэше, то получаем его и записываем в кэш
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'post-{self.kwargs["pk"]}', obj)
+    #
+    #     return obj
 
 
 class PostsSearch(ListView):
