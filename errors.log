@@ -1,0 +1,29 @@
+2023-05-28 23:56:16,747 ERROR Internal Server Error: /news/category/2/
+C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\utils\log.py
+(<class 'AttributeError'>, AttributeError("'AnonymousUser' object has no attribute 'email'"), <traceback object at 0x00000216338C3980>)
+Traceback (most recent call last):
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\news\views.py", line 162, in get_context_data
+    subscribed = category.subscribers.filter(email=user.email)
+                                                   ^^^^^^^^^^
+  File "C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\utils\functional.py", line 268, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'email'
+2023-05-28 23:56:16,751 ERROR "GET /news/category/2/ HTTP/1.1" 500 95820
+C:\Users\sdpv\PycharmProjects\ModuleD2_project_NewsPaper\venv\Lib\site-packages\django\core\servers\basehttp.py
+None
